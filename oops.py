@@ -1,3 +1,5 @@
+import streamlit as st
+
 class Book:
     def __init__(self, title, author, ISBN, year, available_copies):
         self.title = title
@@ -20,17 +22,17 @@ class Member:
             book.available_copies -= 1
             self.borrowed_book.append(book)
         else:
-            print("The book is unavailable")
+            st.write("The book is unavailable")
 
     def return_book(self, book):
         if book in self.borrowed_book:
             book.available_copies += 1
             self.borrowed_book.remove(book)
         else:
-            print("The book is not borrowed")
+            st.write("The book is not borrowed")
 
     def __str__(self):
-        return f"The {self.name} (ID: {self.member_id}, Contact: {self.contact_info})"
+        return f"The {self.name} (ID: {self.member_id}), Contact: {self.contact_info}"
     
 class Library:
     def __init__(self):
@@ -44,16 +46,16 @@ class Library:
         for book in self.books:
             if book.ISBN == ISBN:
                 self.books.remove(book)
-                print(f"The book with ISBN {ISBN} is removed.")
+                st.write(f"The book with ISBN {ISBN} is removed.")
                 return
-        print("Book not found.")
+        st.write("Book not found.")
 
     def search_book(self, ISBN):
         for book in self.books:
             if book.ISBN == ISBN:
-                print(f"Book found: {book}")
+                st.write(f"Book found: {book}")
                 return
-        print("Book not found.")
+        st.write("Book not found.")
 
     def add_member(self, member):
         self.members.append(member)
@@ -62,33 +64,36 @@ class Library:
         for member in self.members:
             if member.member_id == member_id:
                 self.members.remove(member)
-                print(f"The member with ID {member_id} is removed.")
+                st.write(f"The member with ID {member_id} is removed.")
                 return
-        print("Member not found.")
+        st.write("Member not found.")
 
     def list_books(self):
         for book in self.books:
-            print(book)
+            st.write(book)
 
     def list_members(self):
         for member in self.members:
-            print(member)
+            st.write(member)
 
-library = Library()
+def main():
+    st.title("Library management system")
 
-book1 = Book("1984", "George Orwell", "1234567890", 1990, 5)
-library.add_book(book1)
+    library = Library()
 
-member1 = Member("Alice", "1", "alice@example.com")
-library.add_member(member1)
+    book1 = Book(st.text_input("1987","George Orwell","2000",1979,5))
+    library.add_book(book1)
+
+    member1 = Member(st.text_input("Aishu","1234",1234567890))
+    library.add_member(member1)
+
+    member1.borrow_book(book1)
+    member1.return_book(book1)
 
 
-member1.borrow_book(book1)
-member1.return_book(book1)
+    library.list_books()
+    library.list_members()           
 
-
-library.list_books()
-library.list_members()
 
 
 
